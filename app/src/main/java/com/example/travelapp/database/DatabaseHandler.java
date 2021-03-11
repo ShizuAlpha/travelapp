@@ -62,7 +62,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + "FOREIGN KEY("+FavoritesEntry.COLUMN_DIRECTION_ID+") REFERENCES "+DirectionsEntry.TABLE_NAME+"("+DirectionsEntry.ID+") );";
         db.execSQL(SQL_TABLE_3);
 
-        insertDummyData(db);
+        //insertDummyData(db);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -164,6 +164,45 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(UsersEntry.COLUMN_UPDATED_AT,formatDate(LocalDateTime.now()));
         db.insert(UsersEntry.TABLE_NAME,null,values);
         db.close();
+    }
+
+    public boolean checkUser(String username, String password){
+        SQLiteDatabase db= this.getReadableDatabase();
+        Cursor cursor;
+        cursor= db.query(UsersEntry.TABLE_NAME, new String[] { UsersEntry.COLUMN_USERNAME, UsersEntry.COLUMN_PASSWORD }, UsersEntry.COLUMN_USERNAME + "=?",new String[] { String.valueOf(username) }, null, null, null, null);
+        if (cursor!= null) cursor.moveToFirst();
+        if(password.equals(cursor.getString(1))){
+            return true;
+        }
+        return false;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void updatePassword(int userId, String newPassword){
+        SQLiteDatabase db= this.getWritableDatabase();
+        ContentValues values=new ContentValues();
+        values.put(UsersEntry.COLUMN_PASSWORD,newPassword);
+        values.put(UsersEntry.COLUMN_UPDATED_AT,formatDate(LocalDateTime.now()));
+        db.update(UsersEntry.TABLE_NAME,values,UsersEntry.ID+" = ?", new String[] { String.valueOf(userId) });
+        db.close();
+    }
+
+
+    public int getUserId(String username){
+        SQLiteDatabase db= this.getReadableDatabase();
+        Cursor cursor;
+        cursor= db.query(UsersEntry.TABLE_NAME, new String[] { UsersEntry.ID, UsersEntry.COLUMN_USERNAME }, UsersEntry.COLUMN_USERNAME + "=?",new String[] { String.valueOf(username) }, null, null, null, null);
+        if (cursor!= null) cursor.moveToFirst();
+        return cursor.getInt(0);
+    }
+
+    public UsersData getUser(int id){
+        SQLiteDatabase db= this.getReadableDatabase();
+        Cursor cursor;
+        cursor= db.query(UsersEntry.TABLE_NAME, new String[] { UsersEntry.ID, UsersEntry.COLUMN_USERNAME, UsersEntry.COLUMN_FIRST_NAME, UsersEntry.COLUMN_LAST_NAME, UsersEntry. COLUMN_PASSWORD}, UsersEntry.ID + "=?",new String[] { String.valueOf(id) }, null, null, null, null);
+        if (cursor!= null) cursor.moveToFirst();
+        UsersData user=new UsersData(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4));
+        return user;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)

@@ -10,7 +10,6 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.example.travelapp.adapter.DirectionsAdapter;
-import com.example.travelapp.adapter.RecentPlacesAdapter;
 import com.example.travelapp.database.DatabaseHandler;
 import com.example.travelapp.model.DirectionsData;
 

@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">TravelApp</string>
+    <string name="register">Register</string>
+    <string name="empty_field">Please fill all required fields</string>
+    <string name="pass_dont_match">Passwords do not match</string>
+    <string name="fname">First Name</string>
+    <string name="lname">Last Name</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="password_confirmation">Confirm passwords</string>
+    <string name="failed_login">Username or password are incorrect</string>
+    <string name="login_succes">Logged in</string>
 </resources>
